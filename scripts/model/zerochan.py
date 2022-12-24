@@ -14,7 +14,7 @@ class ZeroChanModel:
     def __init__(self) -> None:
         pass
 
-    def embed(self, title: str =None, description: str= None) -> Embed:
+    def embed(self, title: str = None, description: str = None) -> Embed:
         return Embed(title=title, description=description, color=0xABF200)
 
     def request(self, endpoint: str):
@@ -27,33 +27,28 @@ class ZeroChanModel:
 
     def s_id(self, id: int):
         data = self.request("/?s=id&json=1")
-        print(data)
-        ids = [str(var['id']) for var in data['items']]
+        ids = [str(var["id"]) for var in data["items"]]
         urls = []
         for i in ids:
             urls.append(self.BASE_URL + "/" + i)
         view = Paginator(id, ids, urls)
-        view.add_item(
-            Button(label="바로가기", style=ButtonStyle.url, url=urls[0])
-        )
-        embed : Embed= self.embed()
-        data = self.request("/"+ ids[0] + "?json=1")
+        view.add_item(Button(label="바로가기", style=ButtonStyle.url, url=urls[0]))
+        embed: Embed = self.embed()
+        data = self.request("/" + ids[0] + "?json=1")
         embed.set_image(url=data["large"])
         embed.set_footer(text=f"1/{len(ids)}")
         return [embed, view]
 
     def f_id(self, id: int):
         data = self.request("/?s=fav&json=1")
-        ids = [str(var['id']) for var in data['items']]
+        ids = [str(var["id"]) for var in data["items"]]
         urls = []
         for i in ids:
             urls.append(self.BASE_URL + "/" + i)
         view = Paginator(id, ids, urls)
-        view.add_item(
-            Button(label="바로가기", style=ButtonStyle.url, url=urls[0])
-        )
-        embed : Embed= self.embed()
-        data = self.request("/"+ ids[0] + "?json=1")
+        view.add_item(Button(label="바로가기", style=ButtonStyle.url, url=urls[0]))
+        embed: Embed = self.embed()
+        data = self.request("/" + ids[0] + "?json=1")
         embed.set_image(url=data["large"])
         embed.set_footer(text=f"1/{len(ids)}")
         return [embed, view]
@@ -94,19 +89,15 @@ class Paginator(View, ZeroChanModel):
         self.index -= 1
         if self.index < 0:
             self.index = self.total - 1
-        view = Paginator(
-            executor_id=self.executor_id, ids=self.ids, urls=self.urls
-        )
+        view = Paginator(executor_id=self.executor_id, ids=self.ids, urls=self.urls)
         view.add_item(
             Button(label="바로가기", style=ButtonStyle.url, url=self.urls[self.index])
         )
-        data = self.request("/"+ self.ids[self.index] + "?json=1")
-        embed : Embed= self.embed()
+        data = self.request("/" + self.ids[self.index] + "?json=1")
+        embed: Embed = self.embed()
         embed.set_image(url=data["large"])
         embed.set_footer(text=f"{self.index + 1}/{len(self.ids)}")
-        await interaction.response.edit_message(
-            embed=embed, view=view
-        )
+        await interaction.response.edit_message(embed=embed, view=view)
 
     @button(label="다음", style=ButtonStyle.primary, emoji="▶️")
     async def next_page(self, interaction: Interaction, _):
@@ -123,13 +114,11 @@ class Paginator(View, ZeroChanModel):
         view.add_item(
             Button(label="바로가기", style=ButtonStyle.url, url=self.urls[self.index])
         )
-        data = self.request("/"+ self.ids[self.index] + "?json=1")
-        embed : Embed= self.embed()
+        data = self.request("/" + self.ids[self.index] + "?json=1")
+        embed: Embed = self.embed()
         embed.set_image(url=data["large"])
         embed.set_footer(text=f"{self.index + 1}/{len(self.ids)}")
-        await interaction.response.edit_message(
-            embed=embed, view=view
-        )
+        await interaction.response.edit_message(embed=embed, view=view)
 
     @button(label="닫기", style=ButtonStyle.danger, emoji="❌")
     async def close(self, interaction: Interaction, _):

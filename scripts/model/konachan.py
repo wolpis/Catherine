@@ -21,7 +21,7 @@ class KonachanModel:
             return re.json()
         else:
             raise HTTPException(re.status_code)
-    
+
     def post(self, id):
         data = self.request("/post.json")
         embeds = []
@@ -34,9 +34,7 @@ class KonachanModel:
             index += 1
             embeds.append(embed)
         view = Paginator(id, embeds, urls)
-        view.add_item(
-            Button(label="바로가기", style=ButtonStyle.url, url=urls[0])
-        )
+        view.add_item(Button(label="바로가기", style=ButtonStyle.url, url=urls[0]))
         return [embeds[0], view]
 
     def popular(self, id, mode):
@@ -51,7 +49,5 @@ class KonachanModel:
             index += 1
             embeds.append(embed)
         view = Paginator(id, embeds, urls)
-        view.add_item(
-            Button(label="바로가기", style=ButtonStyle.url, url=urls[0])
-        )
+        view.add_item(Button(label="바로가기", style=ButtonStyle.url, url=urls[0]))
         return [embeds[0], view]

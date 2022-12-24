@@ -37,7 +37,7 @@ class BooruModel:
             embed.set_image(
                 url=self.IMAGE_URL + image["directory"] + "/" + image["image"]
             )
-            embed.set_footer(f"{index}/{total}")
+            embed.set_footer(text=f"{index}/{total}")
             embeds.append(embed)
             urls.append(
                 self.BASE_URL + "/index.php?page=post&s=view&id=" + str(image["id"])

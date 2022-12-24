@@ -4,6 +4,7 @@ from model import KonachanModel
 
 konachan_model = KonachanModel()
 
+
 @commands.hybrid_group(name="코나찬")
 async def konachan(ctx: commands.Context):
     """코나찬 기능 명령어들"""
@@ -44,4 +45,3 @@ async def s_id(ctx: commands.Context, 모드: str, 나만보기: bool = False):
         await ctx.send(
             embed=konachan_model.embed(title="해당 명령어는 연령제한채널에서만 가능합니다."), ephemeral=True
         )
-

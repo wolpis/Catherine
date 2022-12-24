@@ -55,7 +55,7 @@ async def pixiv_search(ctx: commands.Context, 나만보기: bool = False):
 
 
 @pixiv.command(name="태그")
-@app_commands.describe(나만보기="일러스트의 가시성을 설정합니다.")
+@app_commands.describe(tag="검색할 태그를 입력해주세요", 나만보기="일러스트의 가시성을 설정합니다.")
 async def pixiv_search(
     ctx: commands.Context, tag: str, r18: bool = False, 나만보기: bool = False
 ):
