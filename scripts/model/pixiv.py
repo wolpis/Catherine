@@ -9,7 +9,9 @@ class PixivModel:
 
     BASE_URL = "https://www.pixiv.net"
     PROXY = "pixiv.cat"
-    RANDOM_URL = "https://setu.yuban10703.xyz/setu?num=1&replace_url=https%3A%2F%2Fi.pixiv.cat"
+    RANDOM_URL = (
+        "https://setu.yuban10703.xyz/setu?num=1&replace_url=https%3A%2F%2Fi.pixiv.cat"
+    )
 
     def __init__(self) -> None:
         pass
@@ -54,20 +56,19 @@ class PixivModel:
         embed = self.embed()
         embed.set_image(url=data["data"][0]["urls"]["original"])
         view = View()
-        button = Button(
-            label="새로고침",
-            style=ButtonStyle.green
-        )
+        button = Button(label="새로고침", style=ButtonStyle.green)
         button.callback = self.random_callback
         view.add_item(
             Button(
                 label="바로가기",
                 style=ButtonStyle.url,
-                url=self.BASE_URL + "/artworks/" + str(data["data"][0]["artwork"]["id"]),
+                url=self.BASE_URL
+                + "/artworks/"
+                + str(data["data"][0]["artwork"]["id"]),
             )
         )
         view.add_item(button)
-        return [embed, view]   
+        return [embed, view]
 
     async def random_callback(self, inter: Interaction) -> None:
         re = requests.get(self.RANDOM_URL)
@@ -88,20 +89,19 @@ class PixivModel:
         embed = self.embed()
         embed.set_image(url=data["data"][0]["urls"]["original"])
         view = View()
-        button = Button(
-            label="새로고침",
-            style=ButtonStyle.green
-        )
+        button = Button(label="새로고침", style=ButtonStyle.green)
         button.callback = self.r18_callback
         view.add_item(
             Button(
                 label="바로가기",
                 style=ButtonStyle.url,
-                url=self.BASE_URL + "/artworks/" + str(data["data"][0]["artwork"]["id"]),
+                url=self.BASE_URL
+                + "/artworks/"
+                + str(data["data"][0]["artwork"]["id"]),
             )
         )
         view.add_item(button)
-        return [embed, view]   
+        return [embed, view]
 
     async def r18_callback(self, inter: Interaction) -> None:
         re = requests.get(self.RANDOM_URL + "&r18=1")
@@ -113,7 +113,6 @@ class PixivModel:
         embed.set_image(url=data["data"][0]["urls"]["original"])
         await inter.response.edit_message(embed=embed)
 
-    
     def ranking_embed(self, id: int, data: dict[str]) -> list[Embed, View]:
         embeds = []
         urls = []
@@ -127,16 +126,9 @@ class PixivModel:
             urls.append(self.BASE_URL + "/artworks/" + str(i["illust_id"]))
             page += 1
         view = Paginator(executor_id=id, embeds=embeds, urls=urls)
-        view.add_item(
-            Button(
-                label="바로가기",
-                style=ButtonStyle.url,
-                url=urls[0]
-            )
-        )
+        view.add_item(Button(label="바로가기", style=ButtonStyle.url, url=urls[0]))
         return [embeds[0], view]
-            
-        
+
     def tag_embed(self, tag: str, r18: bool):
         if r18:
             re = requests.get(self.RANDOM_URL + f"&tags={tag}&r18=1")
@@ -153,8 +145,9 @@ class PixivModel:
             Button(
                 label="바로가기",
                 style=ButtonStyle.url,
-                url=self.BASE_URL + "/artworks/" + str(data["data"][0]["artwork"]["id"]),
+                url=self.BASE_URL
+                + "/artworks/"
+                + str(data["data"][0]["artwork"]["id"]),
             )
         )
         return [embed, view]
-        
