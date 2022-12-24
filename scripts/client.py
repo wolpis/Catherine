@@ -13,7 +13,6 @@ bot = commands.Bot(
 async def on_ready():
     for command in cds:
         bot.add_command(command)
-
     if CatherineConfig.public:
         await bot.tree.sync()
     else:
