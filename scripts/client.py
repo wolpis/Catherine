@@ -23,12 +23,14 @@ async def on_ready():
 @bot.tree.context_menu(name="그림삭제")
 async def change_image(inter: Interaction, msg: Message):
     await inter.response.send_message("처리중..")
-    msg.embeds[0].set_footer(text=f"{inter.user.name}님에 의하여 검열처리")
-    msg.embeds[0].set_image(
-        url="https://media.discordapp.net/attachments/1052260588660719678/1055895525616013372/-angry.gif"
-    )
-    await msg.edit(embed=msg.embeds[0])
-    await inter.delete_original_response()
-
+    try:
+        msg.embeds[0].set_footer(text=f"{inter.user.name}님에 의하여 검열처리")
+        msg.embeds[0].set_image(
+            url="https://media.discordapp.net/attachments/1052260588660719678/1055895525616013372/-angry.gif"
+        )
+        await msg.edit(embed=msg.embeds[0])
+        await inter.delete_original_response()
+    except:
+        await inter.edit_original_response(content="지원하지 않는 메세지입니다.")
 
 bot.run(CatherineConfig.token)
