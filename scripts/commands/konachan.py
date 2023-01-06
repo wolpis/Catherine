@@ -17,7 +17,7 @@ async def s_id(ctx: commands.Context, 나만보기: bool = False):
     """코나찬 최신 작품을 불러옵니다."""
     if ctx.channel.nsfw:
         msg = await ctx.reply("작품을 불러오는 중입니다.", ephemeral=나만보기)
-        data = konachan_model.post(ctx.author.id)
+        data = await konachan_model.post(ctx.author.id)
         await msg.edit(content=None, embed=data[0], view=data[1])
     else:
         await ctx.send(
@@ -39,7 +39,7 @@ async def s_id(ctx: commands.Context, 모드: str, 나만보기: bool = False):
     """코나찬 인기 작품을 불러옵니다."""
     if ctx.channel.nsfw:
         msg = await ctx.reply("작품을 불러오는 중입니다.", ephemeral=나만보기)
-        data = konachan_model.popular(ctx.author.id, 모드)
+        data = await konachan_model.popular(ctx.author.id, 모드)
         await msg.edit(content=None, embed=data[0], view=data[1])
     else:
         await ctx.send(

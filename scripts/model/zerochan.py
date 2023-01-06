@@ -1,4 +1,4 @@
-import requests
+import httpx
 from discord import Embed, ButtonStyle, Interaction
 from discord.ui import Button, View, button
 from typing import Optional
@@ -17,8 +17,9 @@ class ZeroChanModel:
     def embed(self, title: str = None, description: str = None) -> Embed:
         return Embed(title=title, description=description, color=0xABF200)
 
-    def request(self, endpoint: str):
-        re = requests.get(self.BASE_URL + endpoint)
+    async def request(self, endpoint: str):
+        async with httpx.AsyncClient() as requests:
+            re = requests.get(self.BASE_URL + endpoint)
         if re.status_code == 200:
             re = re.text.replace("\\", "")
             return json.loads(re)

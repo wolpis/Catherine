@@ -17,8 +17,8 @@ async def pixiv_search(ctx: commands.Context, illust_id: str, 나만보기: bool
     """픽시브 검색(ID)를 진행합니다."""
     if illust_id.isdigit():
         msg = await ctx.reply("작품을 불러오는 중입니다.", ephemeral=나만보기)
-        data = pixiv_model.request(f"/ajax/illust/{illust_id}")
-        data = pixiv_model.image_embed(data=data)
+        data = await pixiv_model.request(f"/ajax/illust/{illust_id}")
+        data = await pixiv_model.image_embed(data=data)
         await msg.edit(content=None, embed=data[0], view=data[1])
     else:
         await ctx.send(
@@ -32,7 +32,7 @@ async def pixiv_search(ctx: commands.Context, 나만보기: bool = False):
     """픽시브 랜덤작품을 가져옵니다. (약후방 조심)"""
     if ctx.channel.nsfw:
         msg = await ctx.reply("작품을 불러오는 중입니다.", ephemeral=나만보기)
-        data = pixiv_model.random_embed()
+        data = await pixiv_model.random_embed()
         await msg.edit(content=None, embed=data[0], view=data[1])
     else:
         await ctx.send(
@@ -46,7 +46,7 @@ async def pixiv_search(ctx: commands.Context, 나만보기: bool = False):
     """픽시브 랜덤작품을 가져옵니다. (후방 조심)"""
     if ctx.channel.nsfw:
         msg = await ctx.reply("작품을 불러오는 중입니다.", ephemeral=나만보기)
-        data = pixiv_model.r18_embed()
+        data = await pixiv_model.r18_embed()
         await msg.edit(content=None, embed=data[0], view=data[1])
     else:
         await ctx.send(
@@ -62,7 +62,7 @@ async def pixiv_search(
     """픽시브 태그작품을 검색합니다. (후방 조심)"""
     if ctx.channel.nsfw:
         msg = await ctx.reply("작품을 불러오는 중입니다.", ephemeral=나만보기)
-        data = pixiv_model.tag_embed(tag, r18)
+        data = await pixiv_model.tag_embed(tag, r18)
         await msg.edit(content=None, embed=data[0], view=data[1])
     else:
         await ctx.send(
@@ -84,10 +84,10 @@ async def pixiv_search(ctx: commands.Context, 모드: str, 나만보기: bool = 
     if 모드 in ["일일", "주간", "월간"]:
         msg = await ctx.reply("작품을 불러오는 중입니다.", ephemeral=나만보기)
         tag_dict = {"일일": "daily", "주간": "weekly", "월간": "monthly"}
-        data = pixiv_model.request(
+        data = await pixiv_model.request(
             f"/ranking.php?mode={tag_dict[모드]}&content=illust&format=json"
         )
-        data = pixiv_model.ranking_embed(ctx.author.id, data)
+        data = await pixiv_model.ranking_embed(ctx.author.id, data)
         await msg.edit(content=None, embed=data[0], view=data[1])
     else:
         await ctx.send(

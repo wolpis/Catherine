@@ -1,4 +1,4 @@
-import requests
+import httpx
 from discord import Embed, ButtonStyle, Interaction
 from discord.ui import Button, View
 from .error import HTTPException
@@ -22,14 +22,15 @@ class PixivModel:
     def embed(self, title: str = None, description: str = None) -> Embed:
         return Embed(title=title, description=description, color=0x0096FA)
 
-    def request(self, endpoint: str) -> dict[str, str]:
-        re = requests.get(self.BASE_URL + endpoint)
+    async def request(self, endpoint: str) -> dict[str, str]:
+        async with httpx.AsyncClient() as requests:
+            re = await requests.get(self.BASE_URL + endpoint, headers=self.headers)
         if re.status_code == 200:
             return re.json()
         else:
             raise HTTPException(re.status_code)
 
-    def image_embed(self, data: dict[str]) -> list[Embed, View]:
+    async def image_embed(self, data: dict[str]) -> list[Embed, View]:
         if data["error"] == True:
             return [
                 self.embed(title="작품을 찾을 수 없습니다.", description="ID를 다시 확인해주세요!"),
@@ -47,8 +48,9 @@ class PixivModel:
         )
         return [embed, view]
 
-    def random_embed(self) -> list[Embed, View]:
-        re = requests.get(self.RANDOM_URL)
+    async def random_embed(self) -> list[Embed, View]:
+        async with httpx.AsyncClient() as requests:
+            re = requests.get(self.RANDOM_URL)
         if re.status_code == 200:
             data = re.json()
         else:
@@ -71,7 +73,8 @@ class PixivModel:
         return [embed, view]
 
     async def random_callback(self, inter: Interaction) -> None:
-        re = requests.get(self.RANDOM_URL)
+        async with httpx.AsyncClient() as requests:
+            re = requests.get(self.RANDOM_URL)
         if re.status_code == 200:
             data = re.json()
         else:
@@ -80,8 +83,9 @@ class PixivModel:
         embed.set_image(url=data["data"][0]["urls"]["original"])
         await inter.response.edit_message(embed=embed)
 
-    def r18_embed(self) -> list[Embed, View]:
-        re = requests.get(self.RANDOM_URL + "&r18=1")
+    async def r18_embed(self) -> list[Embed, View]:
+        async with httpx.AsyncClient() as requests:
+            re = requests.get(self.RANDOM_URL + "&r18=1")
         if re.status_code == 200:
             data = re.json()
         else:
@@ -104,7 +108,8 @@ class PixivModel:
         return [embed, view]
 
     async def r18_callback(self, inter: Interaction) -> None:
-        re = requests.get(self.RANDOM_URL + "&r18=1")
+        async with httpx.AsyncClient() as requests:
+            re = requests.get(self.RANDOM_URL + "&r18=1")
         if re.status_code == 200:
             data = re.json()
         else:
@@ -129,11 +134,12 @@ class PixivModel:
         view.add_item(Button(label="바로가기", style=ButtonStyle.url, url=urls[0]))
         return [embeds[0], view]
 
-    def tag_embed(self, tag: str, r18: bool):
-        if r18:
-            re = requests.get(self.RANDOM_URL + f"&tags={tag}&r18=1")
-        else:
-            re = requests.get(self.RANDOM_URL + f"&tags={tag}")
+    async def tag_embed(self, tag: str, r18: bool):
+        async with httpx.AsyncClient() as requests:
+            if r18:
+                re = requests.get(self.RANDOM_URL + f"&tags={tag}&r18=1")
+            else:
+                re = requests.get(self.RANDOM_URL + f"&tags={tag}")
         if re.status_code == 200:
             data = re.json()
         else:

@@ -16,7 +16,7 @@ async def zerochan(ctx: commands.Context):
 async def s_id(ctx: commands.Context, 나만보기: bool = False):
     """제로찬 최신 작품을 불러옵니다."""
     msg = await ctx.reply("작품을 불러오는 중입니다.", ephemeral=나만보기)
-    data = zerochan_model.s_id(ctx.author.id)
+    data = await zerochan_model.s_id(ctx.author.id)
     await msg.edit(content=None, embed=data[0], view=data[1])
 
 
@@ -25,5 +25,5 @@ async def s_id(ctx: commands.Context, 나만보기: bool = False):
 async def f_id(ctx: commands.Context, 나만보기: bool = False):
     """제로찬 인기 작품을 불러옵니다."""
     msg = await ctx.reply("작품을 불러오는 중입니다.", ephemeral=나만보기)
-    data = zerochan_model.f_id(ctx.author.id)
+    data = await zerochan_model.f_id(ctx.author.id)
     await msg.edit(content=None, embed=data[0], view=data[1])

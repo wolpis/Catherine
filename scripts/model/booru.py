@@ -1,4 +1,4 @@
-import requests
+import httpx
 from discord import Embed, ButtonStyle, Interaction
 from discord.ui import Button, View
 from .error import HTTPException
@@ -18,15 +18,16 @@ class BooruModel:
     def embed(self, title: str = None, description: str = None) -> Embed:
         return Embed(title=title, description=description, color=0xFFE08C)
 
-    def request(self, endpoint: str):
-        re = requests.get(self.BASE_URL + endpoint, headers=self.headers)
+    async def request(self, endpoint: str):
+        async with httpx.AsyncClient() as requests:
+            re = await requests.get(self.BASE_URL + endpoint, headers=self.headers)
         if re.status_code == 200:
             return re.json()
         else:
             raise HTTPException(re.status_code)
 
-    def post(self, id: int):
-        data: list[str] = self.request("/index.php?page=dapi&s=post&q=index&json=1")
+    async def post(self, id: int):
+        data: list[str] = await self.request("/index.php?page=dapi&s=post&q=index&json=1")
         embeds = []
         urls = []
         image = [val for val in data if val["image"].endswith(".gif") == False]
@@ -47,9 +48,9 @@ class BooruModel:
         view.add_item(Button(label="바로가기", style=ButtonStyle.url, url=urls[0]))
         return [embeds[0], view]
 
-    def search(self, id: int, tag: str):
+    async def search(self, id: int, tag: str):
         try:
-            data: list[str] = self.request(
+            data: list[str] = await self.request(
                 "/index.php?page=dapi&s=post&q=index&json=1&tags=" + tag
             )
             embeds = []

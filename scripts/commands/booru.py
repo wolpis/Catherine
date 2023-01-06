@@ -18,7 +18,7 @@ async def booru(ctx: commands.Context):
 async def post(ctx: commands.Context, tag: str, 나만보기: bool = False):
     """태그를 사용해 작품을 가져옵니다."""
     msg = await ctx.reply("작품을 불러오는 중입니다.", ephemeral=나만보기)
-    data = booru_model.search(ctx.author.id, tag)
+    data = await booru_model.search(ctx.author.id, tag)
     await msg.edit(content=None, embed=data[0], view=data[1])
 
 
@@ -27,5 +27,5 @@ async def post(ctx: commands.Context, tag: str, 나만보기: bool = False):
 async def post(ctx: commands.Context, 나만보기: bool = False):
     """최근에 업데이트된 작품들을 가져옵니다."""
     msg = await ctx.reply("작품을 불러오는 중입니다.", ephemeral=나만보기)
-    data = booru_model.post(ctx.author.id)
+    data = await booru_model.post(ctx.author.id)
     await msg.edit(content=None, embed=data[0], view=data[1])
