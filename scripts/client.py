@@ -1,9 +1,8 @@
-from discord import Object, Interaction, Message, Embed, SelectOption
-from discord.ui import View, Select
-from discord.ext import commands
-
-from config import CatherineConfig
 from commands import commands as cds
+from config import CatherineConfig
+from discord import Embed, Interaction, Message, Object, SelectOption
+from discord.ext import commands
+from discord.ui import Select, View
 
 bot = commands.Bot(
     command_prefix=CatherineConfig.prefix, intents=CatherineConfig.intents()

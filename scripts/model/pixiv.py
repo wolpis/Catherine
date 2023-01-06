@@ -1,6 +1,7 @@
 import httpx
-from discord import Embed, ButtonStyle, Interaction
+from discord import ButtonStyle, Embed, Interaction
 from discord.ui import Button, View
+
 from .error import HTTPException
 from .page import Paginator
 

@@ -1,10 +1,12 @@
-import httpx
-from discord import Embed, ButtonStyle, Interaction
-from discord.ui import Button, View, button
+import json
 from typing import Optional
+
+import httpx
+from discord import ButtonStyle, Embed, Interaction
+from discord.ui import Button, View, button
+
 from .error import HTTPException
 from .page import Paginator
-import json
 
 
 class ZeroChanModel:

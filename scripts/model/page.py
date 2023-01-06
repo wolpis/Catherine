@@ -1,6 +1,7 @@
 from typing import Optional
-from discord import ButtonStyle, Interaction, Embed
-from discord.ui import button, View, Button
+
+from discord import ButtonStyle, Embed, Interaction
+from discord.ui import Button, View, button
 
 
 class Paginator(View):
